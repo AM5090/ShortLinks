@@ -1,20 +1,49 @@
 {
   "links" : [ {
-    "originalLink" : "https://student-lk.skillfactory.ru/my-study",
-    "shortLink" : "click.ru/k2kF1DFt",
-    "clickCount" : "4",
+    "originalLink" : "https://github.com/",
+    "shortLink" : "click.com/4DX0K4n1",
+    "clickCounts" : "4",
+    "availableClickCounts" : "4",
     "lifeTimeInHours" : "24",
     "available" : "true",
     "userID" : "80652781-42dd-429b-927b-86926663a792",
     "id" : "1"
   }, {
-    "originalLink" : "https://github.com/",
-    "shortLink" : "click.com/ZX0uCnrT",
-    "clickCount" : "2",
+    "originalLink" : "https://github.com/464648",
+    "shortLink" : "click.com/5ocnlRAG",
+    "clickCounts" : "4",
+    "availableClickCounts" : "4",
+    "lifeTimeInHours" : "24",
+    "available" : "true",
+    "userID" : "45480652781-42dd-429b-927b-86926663a792",
+    "id" : "2"
+  }, {
+    "originalLink" : "https://github.com/86461",
+    "shortLink" : "click.com/psrFz9zR",
+    "clickCounts" : "7",
+    "availableClickCounts" : "7",
     "lifeTimeInHours" : "24",
     "available" : "true",
     "userID" : "80652781-42dd-429b-927b-86926663a792",
-    "id" : "2"
+    "id" : "3"
+  }, {
+    "originalLink" : "selectedLink",
+    "shortLink" : "click/5vkznzOJ",
+    "clickCounts" : "4",
+    "availableClickCounts" : "4",
+    "lifeTimeInHours" : "24",
+    "available" : "true",
+    "userID" : "80652781-42dd-429b-927b-86926663a792",
+    "id" : "4"
+  }, {
+    "originalLink" : "ффымф",
+    "shortLink" : "click/Il7t8zGV",
+    "clickCounts" : "5",
+    "availableClickCounts" : "5",
+    "lifeTimeInHours" : "24",
+    "available" : "true",
+    "userID" : "80652781-42dd-429b-927b-86926663a792",
+    "id" : "5"
   } ],
   "users" : [ ],
   "auth" : "80652781-42dd-429b-927b-86926663a792"

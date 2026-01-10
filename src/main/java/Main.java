@@ -4,8 +4,12 @@ import java.io.FileNotFoundException;
 
 public class Main {
   public static void main(String[] args) {
-    UserActions user = new UserActions();
+    UserActions userActions = new UserActions();
 
-    user.inputLinkInfo();
+    userActions.inputLinkInfo();
+
+    userActions.showMyLinks();
+
+    userActions.closeScanner();
   }
 }

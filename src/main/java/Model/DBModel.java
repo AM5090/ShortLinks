@@ -1,5 +1,6 @@
 package Model;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.node.ArrayNode;
@@ -11,6 +12,7 @@ import java.nio.file.Paths;
 
 public class DBModel {
 
+  UserModel user = new UserModel();
 
   public ObjectMapper getMapper() {
     return new ObjectMapper().enable(SerializationFeature.INDENT_OUTPUT);
@@ -30,5 +32,19 @@ public class DBModel {
 
   public ArrayNode getLinksList(ObjectNode jsonDataTree) {
     return (ArrayNode) jsonDataTree.get("links");
+  }
+
+  public ArrayNode getUserLinksList(ObjectNode jsonDataTree) {
+    ArrayNode userLinks = this.getMapper().createArrayNode();
+    String userID = user.userID();
+    ArrayNode allLinks = (ArrayNode) jsonDataTree.get("links");
+
+    for (JsonNode nodeLink : allLinks) {
+      String userIdInNode = nodeLink.get("userID").asText();
+      if (userIdInNode.equals(userID)) {
+        userLinks.add(nodeLink);
+      }
+    }
+    return userLinks;
   }
 }

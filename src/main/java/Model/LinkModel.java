@@ -24,30 +24,21 @@ public class LinkModel {
   ObjectMapper mapper = dbModel.getMapper();
   File jsonFilePath = dbModel.getJsonFile();
 
-  public void addNewLink(String originalLink, int clickCount) {
+  public LinkedHashMap<String, String> addNewLink(String originalLink, int clickCount) {
     String domain = this.selectDomainName(originalLink);
     String shortLink = this.generateShortString(domain);
     String userID = userModel.userID();
 
-    JsonNode linkMatch = searchLinkInDB(originalLink);
-
-    if (linkMatch != null) {
-      System.out.println("Такая ссылка уже записана:");
-      linkMatch.properties().forEach(entry -> {
-        System.out.println(entry.getKey() + ": " + entry.getValue().asText());
-      });
-      return;
-    }
-
     LinkedHashMap<String, String> linkInfoItem = new LinkedHashMap<>();
     linkInfoItem.put("originalLink", originalLink);
     linkInfoItem.put("shortLink", shortLink);
-    linkInfoItem.put("clickCount", String.valueOf(clickCount));
+    linkInfoItem.put("clickCounts", String.valueOf(clickCount));
+    linkInfoItem.put("availableClickCounts", String.valueOf(clickCount));
     linkInfoItem.put("lifeTimeInHours", String.valueOf(LIFE_TIME_IN_HOURS));
     linkInfoItem.put("available", String.valueOf(true));
     linkInfoItem.put("userID", userID);
 
-    this.writeLinkInfoInFile(linkInfoItem);
+    return this.writeLinkInfoInFile(linkInfoItem);
   }
 
   private String generateShortString(String domain) {
@@ -79,7 +70,7 @@ public class LinkModel {
     }
   }
 
-  public void writeLinkInfoInFile(LinkedHashMap<String, String> mapForWrite) {
+  public LinkedHashMap<String, String> writeLinkInfoInFile(LinkedHashMap<String, String> mapForWrite) {
     ObjectNode jsonDataTree = dbModel.getJsonDataTree(mapper, jsonFilePath);
     ArrayNode linksList = dbModel.getLinksList(jsonDataTree);
 
@@ -89,6 +80,7 @@ public class LinkModel {
 
     try {
       mapper.writerWithDefaultPrettyPrinter().writeValue(jsonFilePath, jsonDataTree);
+      return mapForWrite;
     } catch (IOException e) {
       throw new RuntimeException(e);
     }
