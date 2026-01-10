@@ -1,0 +1,21 @@
+{
+  "links" : [ {
+    "originalLink" : "https://student-lk.skillfactory.ru/my-study",
+    "shortLink" : "click.ru/k2kF1DFt",
+    "clickCount" : "4",
+    "lifeTimeInHours" : "24",
+    "available" : "true",
+    "userID" : "80652781-42dd-429b-927b-86926663a792",
+    "id" : "1"
+  }, {
+    "originalLink" : "https://github.com/",
+    "shortLink" : "click.com/ZX0uCnrT",
+    "clickCount" : "2",
+    "lifeTimeInHours" : "24",
+    "available" : "true",
+    "userID" : "80652781-42dd-429b-927b-86926663a792",
+    "id" : "2"
+  } ],
+  "users" : [ ],
+  "auth" : "80652781-42dd-429b-927b-86926663a792"
+}
