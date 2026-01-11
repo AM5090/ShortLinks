@@ -9,6 +9,8 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.LinkedHashMap;
 import java.util.Random;
 
@@ -16,7 +18,6 @@ public class LinkModel {
 
   private static final String CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
   private static final byte SHORT_LINK_LENGTH = 8;
-  private static final byte LIFE_TIME_IN_HOURS = 24;
 
   UserModel userModel = new UserModel();
   DBModel dbModel = new DBModel();
@@ -28,13 +29,14 @@ public class LinkModel {
     String domain = this.selectDomainName(originalLink);
     String shortLink = this.generateShortString(domain);
     String userID = userModel.userID();
+    String lifeLinkLife = this.getLinkLife();
 
     LinkedHashMap<String, String> linkInfoItem = new LinkedHashMap<>();
     linkInfoItem.put("originalLink", originalLink);
     linkInfoItem.put("shortLink", shortLink);
     linkInfoItem.put("clickCounts", String.valueOf(clickCount));
     linkInfoItem.put("availableClickCounts", String.valueOf(clickCount));
-    linkInfoItem.put("lifeTimeInHours", String.valueOf(LIFE_TIME_IN_HOURS));
+    linkInfoItem.put("lifeTimeInHours", lifeLinkLife);
     linkInfoItem.put("available", String.valueOf(true));
     linkInfoItem.put("userID", userID);
 
@@ -86,6 +88,26 @@ public class LinkModel {
     }
   }
 
+  public void changeLinkInfoInFile(int selectedLinkId, String keyName, String newValue) {
+    ObjectNode jsonDataTree = dbModel.getJsonDataTree(mapper, jsonFilePath);
+    ArrayNode linksList = dbModel.getLinksList(jsonDataTree);
+
+    for (JsonNode linkNode : linksList) {
+      JsonNode linkNodeID = linkNode.get("id");
+      int originalLinkID = linkNodeID.asInt();
+      if (originalLinkID == selectedLinkId) {
+        ObjectNode linkObject = (ObjectNode) linkNode;
+        linkObject.put(keyName, newValue);
+      }
+    }
+
+    try {
+      mapper.writerWithDefaultPrettyPrinter().writeValue(jsonFilePath, jsonDataTree);
+    } catch (IOException e) {
+      throw new RuntimeException(e);
+    }
+  }
+
   public JsonNode searchLinkInDB(String getLink) {
     ObjectNode jsonDataTree = dbModel.getJsonDataTree(mapper, jsonFilePath);
     ArrayNode linksList = dbModel.getLinksList(jsonDataTree);
@@ -99,5 +121,20 @@ public class LinkModel {
     }
 
     return null;
+  }
+
+  public String getLinkLife() {
+    Calendar calendar = Calendar.getInstance();
+
+    calendar.add(Calendar.DAY_OF_YEAR, 1);
+
+    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    return sdf.format(calendar.getTime());
+  }
+
+  public boolean linkValidation(String str) {
+    if (str.isEmpty()) return false;
+    String regex = "^(http|https)://.*\\.[a-z]{2,6}(/.*)?";
+    return str.matches(regex);
   }
 }

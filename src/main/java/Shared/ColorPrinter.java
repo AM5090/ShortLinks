@@ -11,9 +11,6 @@ public class ColorPrinter {
     BLUE("\u001B[34m"),
     PURPLE("\u001B[35m"),
     WHITE("\u001B[37m");
-//    CYAN("\u001B[36m"),
-//    BOLD("\u001B[1m"),
-//    UNDERLINE("\u001B[4m");
 
     private final String code;
 

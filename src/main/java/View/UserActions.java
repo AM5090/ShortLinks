@@ -21,8 +21,8 @@ public class UserActions {
   String originalLink;
   int clickCount;
   int selectedLinkId;
-  String selectedLink; // ссылка для перехода
-
+  String selectedLink;
+  JsonNode selectedLinkNode;
 
   Scanner linkScanner = new Scanner(System.in);
 
@@ -33,34 +33,25 @@ public class UserActions {
   ObjectMapper mapper = dbController.getMapper();
   File jsonFilePath = dbController.getJsonFile();
 
-  public void showMyLinks() {
-    String userID = userController.userID();
-    ObjectNode jsonDataTree = dbController.getJsonDataTree(mapper, jsonFilePath);
-
-    ColorPrinter.println(ColorPrinter.Color.GREEN,"Ваш ID: " + userID);
-    ColorPrinter.println(ColorPrinter.Color.GREEN,"Доступные ссылки для управления:");
-    ArrayNode linksList = dbController.getUserLinksList(jsonDataTree);
-
-    for (JsonNode linkNode : linksList) {
-      ColorPrinter.print(ColorPrinter.Color.RED, linkNode.get("id").asText() + ": ");
-      ColorPrinter.print(ColorPrinter.Color.WHITE, "Ссылка: " );
-      ColorPrinter.print(ColorPrinter.Color.YELLOW, linkNode.get("shortLink").asText() + " ");
-      ColorPrinter.print(ColorPrinter.Color.WHITE, "Доступна: ");
-      ColorPrinter.print(ColorPrinter.Color.YELLOW, (linkNode.get("available").asBoolean() ? "Да" : "Нет") + " ");
-      ColorPrinter.print(ColorPrinter.Color.WHITE, "Переходов осталось: ");
-      ColorPrinter.println(ColorPrinter.Color.YELLOW, linkNode.get("availableClickCounts").asText());
-    }
-    System.out.println();
-
-    this.openLink(linksList);
-  }
-
-  public void inputLinkInfo() {
+  public boolean inputLinkInfo() {
     ColorPrinter.println(ColorPrinter.Color.GREEN, "Укажите оригинальную ссылку:");
+    ColorPrinter.println(ColorPrinter.Color.WHITE, "(Введите L для отображения доступных ссылок)");
     ColorPrinter.print(ColorPrinter.Color.GREEN, "> ");
 
     if (linkScanner.hasNextLine()) {
       originalLink = linkScanner.nextLine();
+    }
+
+    if (originalLink.equals("L")) {
+      return true;
+    }
+
+    boolean linkIsValid = linksController.linkValidation(originalLink);
+    if (!linkIsValid) {
+      ColorPrinter.println(ColorPrinter.Color.RED, "Некорректный формат ссылки:");
+      ColorPrinter.println(ColorPrinter.Color.RED, originalLink);
+      System.out.println();
+      return false;
     }
 
     JsonNode linkMatches = linksController.searchLinkInDB(originalLink);
@@ -69,7 +60,7 @@ public class UserActions {
       System.out.println();
       ColorPrinter.println(ColorPrinter.Color.RED, "Такая ссылка уже записана:");
       this.linkInformation(linkMatches);
-      return;
+      return true;
     }
 
     System.out.println();
@@ -89,26 +80,103 @@ public class UserActions {
     System.out.println();
     ColorPrinter.println(ColorPrinter.Color.GREEN,"Информация по новой записи:");
     this.linkInformation(newLinkInfo);
+    return true;
+  }
+
+  public void showMyLinks() {
+    String userID = userController.userID();
+    ObjectNode jsonDataTree = dbController.getJsonDataTree(mapper, jsonFilePath);
+
+    ColorPrinter.println(ColorPrinter.Color.GREEN,"Ваш ID: " + userID);
+    ColorPrinter.println(ColorPrinter.Color.GREEN,"Доступные ссылки для управления:");
+    ArrayNode linksList = dbController.getUserLinksList(jsonDataTree);
+
+    for (JsonNode linkNode : linksList) {
+      ColorPrinter.print(ColorPrinter.Color.RED, linkNode.get("id").asText() + ": ");
+      ColorPrinter.print(ColorPrinter.Color.WHITE, "Ссылка: " );
+      ColorPrinter.print(ColorPrinter.Color.YELLOW, linkNode.get("shortLink").asText() + " ");
+      ColorPrinter.print(ColorPrinter.Color.WHITE, "Доступна: ");
+      if (linkNode.get("available").asBoolean()) {
+        ColorPrinter.print(ColorPrinter.Color.GREEN, "Да" + " ");
+      } else {
+        ColorPrinter.print(ColorPrinter.Color.RED, "Нет" + " ");
+      }
+
+      ColorPrinter.print(ColorPrinter.Color.WHITE, "Доступна до: ");
+      ColorPrinter.print(ColorPrinter.Color.YELLOW, (linkNode.get("lifeTimeInHours").asText()) + " ");
+      ColorPrinter.print(ColorPrinter.Color.WHITE, "Переходов осталось: ");
+      ColorPrinter.println(ColorPrinter.Color.YELLOW, linkNode.get("availableClickCounts").asText());
+    }
+    System.out.println();
+
+    this.openLink(linksList);
   }
 
   public void openLink(ArrayNode linksList) {
-    ColorPrinter.println(ColorPrinter.Color.GREEN, "Укажите id ссылки для взаимодействия" );
+    ColorPrinter.println(ColorPrinter.Color.GREEN, "Укажите id ссылки для взаимодействия:" );
+    ColorPrinter.println(ColorPrinter.Color.WHITE, "(Введите 0 для завершения работы)");
     ColorPrinter.print(ColorPrinter.Color.GREEN, "> ");
 
     if (linkScanner.hasNextInt()) {
       selectedLinkId = linkScanner.nextInt();
     }
 
+    System.out.println("selectedLinkId >>> " + selectedLinkId);
+    System.out.println("linksList >>> " + linksList.size());
+    if (selectedLinkId > linksList.size()) {
+      ColorPrinter.println(ColorPrinter.Color.RED, "Введен некорректный ID: " + selectedLinkId);
+      return;
+    }
+
+    if (selectedLinkId == 0) {
+      return;
+    }
+
     for (JsonNode linkNode : linksList) {
       JsonNode linkNodeID = linkNode.get("id");
-      int originalLink = linkNodeID.asInt();
-      if (originalLink == selectedLinkId) {
+      int originalLinkID = linkNodeID.asInt();
+      if (originalLinkID == selectedLinkId) {
+        System.out.println("originalLinkID >>> " + originalLinkID);
         selectedLink = linkNode.get("originalLink").asText();
+        selectedLinkNode = linkNode;
       }
+    }
+
+    if (selectedLinkNode == null) {
+      System.out.println();
+      ColorPrinter.print(ColorPrinter.Color.RED, "Ссылка с ID ");
+      ColorPrinter.print(ColorPrinter.Color.YELLOW, String.valueOf(selectedLinkId));
+      ColorPrinter.print(ColorPrinter.Color.RED, " не доступна!");
+      return;
+    }
+
+    String selectedShortLink = selectedLinkNode.get("shortLink").asText();
+    int actualClickCount = selectedLinkNode.get("availableClickCounts").asInt();
+
+    if (actualClickCount == 0) {
+      System.out.println();
+      ColorPrinter.print(ColorPrinter.Color.RED, "Ссылка ");
+      ColorPrinter.print(ColorPrinter.Color.YELLOW, selectedShortLink);
+      ColorPrinter.print(ColorPrinter.Color.RED, " с ID ");
+      ColorPrinter.print(ColorPrinter.Color.YELLOW, String.valueOf(selectedLinkId));
+      ColorPrinter.print(ColorPrinter.Color.RED, " больше не доступна!");
+
+      return;
+    }
+
+    int newClickCounts = actualClickCount - 1;
+
+    if (newClickCounts <= 0) {
+      linksController.changeLinkInfoInFile(selectedLinkId, "available", "false");
+    }
+
+    if (newClickCounts >= 0) {
+      linksController.changeLinkInfoInFile(selectedLinkId, "availableClickCounts", String.valueOf(newClickCounts));
     }
 
     try {
       Desktop.getDesktop().browse(new URI(selectedLink));
+      System.out.println();
       ColorPrinter.print(ColorPrinter.Color.GREEN, "Ссылка открыта в браузере!");
     } catch (IOException | URISyntaxException e) {
       throw new RuntimeException(e);
@@ -136,6 +204,9 @@ public class UserActions {
   }
 
   public void closeScanner() {
+    System.out.println();
+    System.out.println();
+    ColorPrinter.println(ColorPrinter.Color.GREEN, "Приложение завершило свою работу!" );
     linkScanner.close();
   }
 }

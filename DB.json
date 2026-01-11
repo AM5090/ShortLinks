@@ -1,49 +1,31 @@
 {
   "links" : [ {
-    "originalLink" : "https://github.com/",
-    "shortLink" : "click.com/4DX0K4n1",
-    "clickCounts" : "4",
-    "availableClickCounts" : "4",
-    "lifeTimeInHours" : "24",
+    "originalLink" : "https://student-lk.skillfactory.ru/",
+    "shortLink" : "click.ru/joNnPQz2",
+    "clickCounts" : "2",
+    "availableClickCounts" : "1",
+    "lifeTimeInHours" : "2026-01-12 16:13:57",
     "available" : "true",
     "userID" : "80652781-42dd-429b-927b-86926663a792",
     "id" : "1"
   }, {
-    "originalLink" : "https://github.com/464648",
-    "shortLink" : "click.com/5ocnlRAG",
-    "clickCounts" : "4",
-    "availableClickCounts" : "4",
-    "lifeTimeInHours" : "24",
+    "originalLink" : "https://github.com/",
+    "shortLink" : "click.com/r6adUKLJ",
+    "clickCounts" : "2",
+    "availableClickCounts" : "2",
+    "lifeTimeInHours" : "2026-01-12 16:15:13",
     "available" : "true",
-    "userID" : "45480652781-42dd-429b-927b-86926663a792",
+    "userID" : "80652744-42dd-429b-927b-86926663a792",
     "id" : "2"
   }, {
-    "originalLink" : "https://github.com/86461",
-    "shortLink" : "click.com/psrFz9zR",
-    "clickCounts" : "7",
-    "availableClickCounts" : "7",
-    "lifeTimeInHours" : "24",
+    "originalLink" : "https://translate.yandex.ru/?source_lang=ru&target_lang=en&text=%D0%B4%D0%B5%D0%B9%D1%81%D1%82%D0%B2%D0",
+    "shortLink" : "click.ru/kumL86Dy",
+    "clickCounts" : "2",
+    "availableClickCounts" : "2",
+    "lifeTimeInHours" : "2026-01-12 16:16:26",
     "available" : "true",
     "userID" : "80652781-42dd-429b-927b-86926663a792",
     "id" : "3"
-  }, {
-    "originalLink" : "selectedLink",
-    "shortLink" : "click/5vkznzOJ",
-    "clickCounts" : "4",
-    "availableClickCounts" : "4",
-    "lifeTimeInHours" : "24",
-    "available" : "true",
-    "userID" : "80652781-42dd-429b-927b-86926663a792",
-    "id" : "4"
-  }, {
-    "originalLink" : "ффымф",
-    "shortLink" : "click/Il7t8zGV",
-    "clickCounts" : "5",
-    "availableClickCounts" : "5",
-    "lifeTimeInHours" : "24",
-    "available" : "true",
-    "userID" : "80652781-42dd-429b-927b-86926663a792",
-    "id" : "5"
   } ],
   "users" : [ ],
   "auth" : "80652781-42dd-429b-927b-86926663a792"

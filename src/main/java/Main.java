@@ -6,7 +6,9 @@ public class Main {
   public static void main(String[] args) {
     UserActions userActions = new UserActions();
 
-    userActions.inputLinkInfo();
+    boolean stopApplication = userActions.inputLinkInfo();
+
+    if (!stopApplication) return;
 
     userActions.showMyLinks();
 
