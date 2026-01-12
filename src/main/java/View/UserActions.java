@@ -91,7 +91,8 @@ public class UserActions {
 
     ColorPrinter.println(ColorPrinter.Color.GREEN,"Ваш ID: " + userID);
     ColorPrinter.println(ColorPrinter.Color.GREEN,"Доступные ссылки для управления:");
-    ArrayNode linksList = dbController.getUserLinksList(jsonDataTree);
+    ArrayNode linksListUser = dbController.getUserLinksList(jsonDataTree);
+    ArrayNode linksList = linksController.checkingLinkTimeAvailable(linksListUser);
 
     for (JsonNode linkNode : linksList) {
       ColorPrinter.print(ColorPrinter.Color.RED, linkNode.get("id").asText() + ": ");
@@ -146,8 +147,9 @@ public class UserActions {
 
     String selectedShortLink = selectedLinkNode.get("shortLink").asText();
     int actualClickCount = selectedLinkNode.get("availableClickCounts").asInt();
+    boolean linkAvailable = selectedLinkNode.get("available").asBoolean();
 
-    if (actualClickCount == 0) {
+    if (actualClickCount == 0 || !linkAvailable) {
       System.out.println();
       ColorPrinter.print(ColorPrinter.Color.RED, "Ссылка ");
       ColorPrinter.print(ColorPrinter.Color.YELLOW, selectedShortLink);

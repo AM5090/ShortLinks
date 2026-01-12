@@ -9,8 +9,10 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.Random;
 
@@ -18,8 +20,10 @@ public class LinkModel {
 
   private static final String CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
   private static final byte SHORT_LINK_LENGTH = 8;
+  private static final String DATE_FORMAT = "yyyy-MM-dd HH:mm:ss";
   int shortLinkLength;
   ArrayNode findInLinksList;
+  Date dateChacking;
 
   UserModel userModel = new UserModel();
   DBModel dbModel = new DBModel();
@@ -141,7 +145,7 @@ public class LinkModel {
 
     calendar.add(Calendar.DAY_OF_YEAR, 1);
 
-    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT);
     return sdf.format(calendar.getTime());
   }
 
@@ -165,6 +169,33 @@ public class LinkModel {
     }
 
     return false;
+  }
+
+  public ArrayNode checkingLinkTimeAvailable(ArrayNode linksList) {
+    Calendar currentCalendar = Calendar.getInstance();
+    Calendar targetCalendar = Calendar.getInstance();
+    SimpleDateFormat formatter = new SimpleDateFormat(DATE_FORMAT);
+
+    for (JsonNode linkNode : linksList) {
+      String lifeTimeInHours = linkNode.get("lifeTimeInHours").asText();
+
+
+      try {
+        dateChacking = formatter.parse(lifeTimeInHours);
+      } catch (ParseException e) {
+        throw new RuntimeException(e);
+      }
+
+      targetCalendar.setTime(dateChacking);
+
+      if (currentCalendar.getTime().compareTo(targetCalendar.getTime()) > 0) {
+        int linkNodeId = linkNode.get("id").asInt();
+        this.changeLinkInfoInFile(linkNodeId, "available", "false");
+      }
+    }
+
+    ObjectNode jsonDataTree = dbModel.getJsonDataTree(mapper, jsonFilePath);
+    return dbModel.getUserLinksList(jsonDataTree);
   }
 
 }

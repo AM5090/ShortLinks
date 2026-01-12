@@ -30,9 +30,9 @@
     "originalLink" : "https://translate.yandex.ru/",
     "shortLink" : "click.ru/obGmrARK",
     "clickCounts" : "4",
-    "availableClickCounts" : "2",
-    "lifeTimeInHours" : "2026-01-13 16:21:34",
-    "available" : "true",
+    "availableClickCounts" : "1",
+    "lifeTimeInHours" : "2026-01-11 16:21:34",
+    "available" : "false",
     "userID" : "dbded5e0-33ad-4782-b852-c14702e46903",
     "id" : "4"
   }, {
@@ -48,9 +48,9 @@
     "originalLink" : "https://student-lk.skillfactory.ru/",
     "shortLink" : "click.ru/C5jijjUVPTa",
     "clickCounts" : "3",
-    "availableClickCounts" : "2",
+    "availableClickCounts" : "0",
     "lifeTimeInHours" : "2026-01-13 19:16:55",
-    "available" : "true",
+    "available" : "false",
     "userID" : "dbded5e0-33ad-4782-b852-c14702e46903",
     "id" : "6"
   } ],

@@ -1,6 +1,7 @@
 package Controller;
 import Model.LinkModel;
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import java.util.LinkedHashMap;
@@ -25,11 +26,11 @@ public class LinksController {
     linkModel.changeLinkInfoInFile(selectedLinkId, keyName, newValue);
   }
 
-//  public boolean duplicateLinksFromOtherOwners(JsonNode checkLinkOwner) {
-//    return linkModel.duplicateLinksFromOtherOwners(checkLinkOwner);
-//  }
-
   public boolean duplicateLinksFromOtherOwners(String originalLink) {
     return linkModel.duplicateLinksFromOtherOwners(originalLink);
+  }
+
+  public ArrayNode checkingLinkTimeAvailable(ArrayNode linksList) {
+    return linkModel.checkingLinkTimeAvailable(linksList);
   }
 }
