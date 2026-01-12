@@ -55,4 +55,14 @@ public class UserModel {
       throw new RuntimeException(e);
     }
   }
+
+  public String getUserId() {
+    try {
+      authData = mapper.readTree(jsonFilePath).path("auth");
+    } catch (IOException e) {
+      throw new RuntimeException(e);
+    }
+
+    return (authData.isNull() || authData.isMissingNode()) ? null : authData.asText();
+  }
 }

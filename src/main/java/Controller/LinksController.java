@@ -9,19 +9,27 @@ public class LinksController {
 
   LinkModel linkModel = new LinkModel();
 
-  public LinkedHashMap<String, String> addNewLink(String originalLink, int clickCount) {
-    return linkModel.addNewLink(originalLink, clickCount);
+  public LinkedHashMap<String, String> addNewLink(String originalLink, int clickCount, boolean duplicate) {
+    return linkModel.addNewLink(originalLink, clickCount, duplicate);
   }
 
-  public JsonNode searchLinkInDB(String getLink) {
-    return linkModel.searchLinkInDB(getLink);
+  public JsonNode searchLinkInDB(String getLink, boolean findInUserLinks) {
+    return linkModel.searchLinkInDB(getLink, findInUserLinks);
   }
 
-  public boolean linkValidation(String str) {
-    return linkModel.linkValidation(str);
+  public boolean linkValidation(String link) {
+    return linkModel.linkValidation(link);
   }
 
   public void changeLinkInfoInFile(int selectedLinkId, String keyName, String newValue) {
     linkModel.changeLinkInfoInFile(selectedLinkId, keyName, newValue);
+  }
+
+//  public boolean duplicateLinksFromOtherOwners(JsonNode checkLinkOwner) {
+//    return linkModel.duplicateLinksFromOtherOwners(checkLinkOwner);
+//  }
+
+  public boolean duplicateLinksFromOtherOwners(String originalLink) {
+    return linkModel.duplicateLinksFromOtherOwners(originalLink);
   }
 }

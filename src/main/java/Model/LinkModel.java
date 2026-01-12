@@ -18,6 +18,8 @@ public class LinkModel {
 
   private static final String CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
   private static final byte SHORT_LINK_LENGTH = 8;
+  int shortLinkLength;
+  ArrayNode findInLinksList;
 
   UserModel userModel = new UserModel();
   DBModel dbModel = new DBModel();
@@ -25,11 +27,11 @@ public class LinkModel {
   ObjectMapper mapper = dbModel.getMapper();
   File jsonFilePath = dbModel.getJsonFile();
 
-  public LinkedHashMap<String, String> addNewLink(String originalLink, int clickCount) {
+  public LinkedHashMap<String, String> addNewLink(String originalLink, int clickCount, boolean duplicate) {
     String domain = this.selectDomainName(originalLink);
-    String shortLink = this.generateShortString(domain);
+    String shortLink = this.generateShortString(domain, duplicate);
     String userID = userModel.userID();
-    String lifeLinkLife = this.getLinkLife();
+    String lifeLinkLife = this.setLinkLife();
 
     LinkedHashMap<String, String> linkInfoItem = new LinkedHashMap<>();
     linkInfoItem.put("originalLink", originalLink);
@@ -43,11 +45,17 @@ public class LinkModel {
     return this.writeLinkInfoInFile(linkInfoItem);
   }
 
-  private String generateShortString(String domain) {
+  private String generateShortString(String domain, boolean duplicate) {
     Random random = new Random();
     StringBuilder sb = new StringBuilder(SHORT_LINK_LENGTH);
 
-    for (int i = 0; i < SHORT_LINK_LENGTH; i++) {
+    if (!duplicate) {
+      shortLinkLength = SHORT_LINK_LENGTH;
+    } else {
+      shortLinkLength = SHORT_LINK_LENGTH + 3;
+    }
+
+    for (int i = 0; i < shortLinkLength; i++) {
       int index = random.nextInt(CHARACTERS.length());
       sb.append(CHARACTERS.charAt(index));
     }
@@ -108,13 +116,18 @@ public class LinkModel {
     }
   }
 
-  public JsonNode searchLinkInDB(String getLink) {
+  public JsonNode searchLinkInDB(String getLink, boolean findInUserLinks) {
     ObjectNode jsonDataTree = dbModel.getJsonDataTree(mapper, jsonFilePath);
-    ArrayNode linksList = dbModel.getLinksList(jsonDataTree);
+    if (findInUserLinks) {
+      findInLinksList = dbModel.getUserLinksList(jsonDataTree);
+    } else {
+      findInLinksList = dbModel.getLinksList(jsonDataTree);
+    }
 
-    for (JsonNode linkNode : linksList) {
+    for (JsonNode linkNode : findInLinksList) {
       JsonNode originalLinkNode = linkNode.get("originalLink");
       String originalLink = originalLinkNode.asText();
+
       if (originalLink.equals(getLink)) {
         return linkNode;
       }
@@ -123,7 +136,7 @@ public class LinkModel {
     return null;
   }
 
-  public String getLinkLife() {
+  public String setLinkLife() {
     Calendar calendar = Calendar.getInstance();
 
     calendar.add(Calendar.DAY_OF_YEAR, 1);
@@ -132,9 +145,26 @@ public class LinkModel {
     return sdf.format(calendar.getTime());
   }
 
-  public boolean linkValidation(String str) {
-    if (str.isEmpty()) return false;
+  public boolean linkValidation(String link) {
+    if (link.isEmpty()) return false;
     String regex = "^(http|https)://.*\\.[a-z]{2,6}(/.*)?";
-    return str.matches(regex);
+    return link.matches(regex);
   }
+
+  public boolean duplicateLinksFromOtherOwners(String originalLink) {
+    ObjectNode jsonDataTree = dbModel.getJsonDataTree(mapper, jsonFilePath);
+    ArrayNode linksList = dbModel.getLinksList(jsonDataTree);
+    String userId = userModel.getUserId();
+
+    for (JsonNode linkNode : linksList) {
+      String originalLinkNode = linkNode.get("originalLink").asText();
+      String linkNodeOwnerId = linkNode.get("userID").asText();
+      if (originalLinkNode.equals(originalLink) && !linkNodeOwnerId.equals(userId)) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
 }

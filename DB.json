@@ -3,9 +3,9 @@
     "originalLink" : "https://student-lk.skillfactory.ru/",
     "shortLink" : "click.ru/joNnPQz2",
     "clickCounts" : "2",
-    "availableClickCounts" : "1",
+    "availableClickCounts" : "0",
     "lifeTimeInHours" : "2026-01-12 16:13:57",
-    "available" : "true",
+    "available" : "false",
     "userID" : "80652781-42dd-429b-927b-86926663a792",
     "id" : "1"
   }, {
@@ -21,12 +21,39 @@
     "originalLink" : "https://translate.yandex.ru/?source_lang=ru&target_lang=en&text=%D0%B4%D0%B5%D0%B9%D1%81%D1%82%D0%B2%D0",
     "shortLink" : "click.ru/kumL86Dy",
     "clickCounts" : "2",
-    "availableClickCounts" : "2",
+    "availableClickCounts" : "0",
     "lifeTimeInHours" : "2026-01-12 16:16:26",
-    "available" : "true",
+    "available" : "false",
     "userID" : "80652781-42dd-429b-927b-86926663a792",
     "id" : "3"
+  }, {
+    "originalLink" : "https://translate.yandex.ru/",
+    "shortLink" : "click.ru/obGmrARK",
+    "clickCounts" : "4",
+    "availableClickCounts" : "2",
+    "lifeTimeInHours" : "2026-01-13 16:21:34",
+    "available" : "true",
+    "userID" : "dbded5e0-33ad-4782-b852-c14702e46903",
+    "id" : "4"
+  }, {
+    "originalLink" : "https://github.com/",
+    "shortLink" : "click.com/UYuckPUFCYc",
+    "clickCounts" : "4",
+    "availableClickCounts" : "4",
+    "lifeTimeInHours" : "2026-01-13 19:15:32",
+    "available" : "true",
+    "userID" : "dbded5e0-33ad-4782-b852-c14702e46903",
+    "id" : "5"
+  }, {
+    "originalLink" : "https://student-lk.skillfactory.ru/",
+    "shortLink" : "click.ru/C5jijjUVPTa",
+    "clickCounts" : "3",
+    "availableClickCounts" : "2",
+    "lifeTimeInHours" : "2026-01-13 19:16:55",
+    "available" : "true",
+    "userID" : "dbded5e0-33ad-4782-b852-c14702e46903",
+    "id" : "6"
   } ],
   "users" : [ ],
-  "auth" : "80652781-42dd-429b-927b-86926663a792"
+  "auth" : "dbded5e0-33ad-4782-b852-c14702e46903"
 }

@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Scanner;
 
 import Controller.DBController;
@@ -54,7 +55,8 @@ public class UserActions {
       return false;
     }
 
-    JsonNode linkMatches = linksController.searchLinkInDB(originalLink);
+    JsonNode linkMatches = linksController.searchLinkInDB(originalLink, true);
+    boolean duplicateLink = linksController.duplicateLinksFromOtherOwners(originalLink);
 
     if (linkMatches != null) {
       System.out.println();
@@ -76,7 +78,7 @@ public class UserActions {
       clickCount = 10;
     }
 
-    LinkedHashMap<String, String> newLinkInfo = linksController.addNewLink(originalLink, clickCount);
+    LinkedHashMap<String, String> newLinkInfo = linksController.addNewLink(originalLink, clickCount, duplicateLink);
     System.out.println();
     ColorPrinter.println(ColorPrinter.Color.GREEN,"Информация по новой записи:");
     this.linkInformation(newLinkInfo);
@@ -121,13 +123,6 @@ public class UserActions {
       selectedLinkId = linkScanner.nextInt();
     }
 
-    System.out.println("selectedLinkId >>> " + selectedLinkId);
-    System.out.println("linksList >>> " + linksList.size());
-    if (selectedLinkId > linksList.size()) {
-      ColorPrinter.println(ColorPrinter.Color.RED, "Введен некорректный ID: " + selectedLinkId);
-      return;
-    }
-
     if (selectedLinkId == 0) {
       return;
     }
@@ -136,7 +131,6 @@ public class UserActions {
       JsonNode linkNodeID = linkNode.get("id");
       int originalLinkID = linkNodeID.asInt();
       if (originalLinkID == selectedLinkId) {
-        System.out.println("originalLinkID >>> " + originalLinkID);
         selectedLink = linkNode.get("originalLink").asText();
         selectedLinkNode = linkNode;
       }

@@ -36,7 +36,7 @@ public class DBModel {
 
   public ArrayNode getUserLinksList(ObjectNode jsonDataTree) {
     ArrayNode userLinks = this.getMapper().createArrayNode();
-    String userID = user.userID();
+    String userID = user.getUserId();
     ArrayNode allLinks = (ArrayNode) jsonDataTree.get("links");
 
     for (JsonNode nodeLink : allLinks) {
